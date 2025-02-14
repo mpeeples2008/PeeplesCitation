@@ -22,9 +22,9 @@ library(scholar)
 ## Define the id for Matthew Peeples
 id <- '8B39PWQAAAAJ'
 
-## Get his citation history, i.e. citations to his work in a given year
+## Get citation history
 ct <- get_citation_history(id)
-ct <- ct[-nrow(ct),]
+ct <- ct[-nrow(ct),] # remove current year
 
 
 ## Plot citation trend
@@ -111,13 +111,8 @@ levels(field2$Var1) <- c(levels(field2$Var1), 'Other')
 field2[11,1] <- 'Other'
 colnames(field2) <- c('Field','Freq')
 
-# Compute percentages
 field2$fraction = field2$Freq / sum(field2$Freq)
-
-# Compute the cumulative percentages (top of each rectangle)
 field2$ymax = cumsum(field2$fraction)
-
-# Compute the bottom of each rectangle
 field2$ymin = c(0, head(field2$ymax, n=-1))
 
 # Make the plot
@@ -128,9 +123,9 @@ p2 <- ggplot(field2, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Field)) +
   xlim(c(2, 4)) +
   theme_minimal()
 
-p2 <- p2 +  theme(axis.ticks=element_blank(),  # the axis ticks
-           axis.title=element_blank(),  # the axis labels
-           axis.text.y=element_blank()) # the 0.75, 1.00, 1.25 labels.
+p2 <- p2 +  theme(axis.ticks=element_blank(),  
+           axis.title=element_blank(),  
+           axis.text.y=element_blank()) 
 p2
 ```
 
@@ -146,13 +141,8 @@ levels(lang2$Var1) <- c(levels(lang2$Var1), 'Other')
 lang2[9,1] <- 'Other'
 colnames(lang2) <- c('Language','Freq')
 
-# Compute percentages
 lang2$fraction = lang2$Freq / sum(lang2$Freq)
-
-# Compute the cumulative percentages (top of each rectangle)
 lang2$ymax = cumsum(lang2$fraction)
-
-# Compute the bottom of each rectangle
 lang2$ymin = c(0, head(lang2$ymax, n=-1))
 
 # Make the plot
@@ -163,9 +153,9 @@ p1 <- ggplot(lang2, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Language)) +
   xlim(c(2, 4)) +
   theme_minimal()
 
-p1 <- p1 +  theme(axis.ticks=element_blank(),  # the axis ticks
-           axis.title=element_blank(),  # the axis labels
-           axis.text.y=element_blank()) # the 0.75, 1.00, 1.25 labels.
+p1 <- p1 +  theme(axis.ticks=element_blank(), 
+           axis.title=element_blank(),  
+           axis.text.y=element_blank()) 
 
 p1
 ```
