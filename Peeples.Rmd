@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/13/2025) using the Harzing Publish or Perish Windows application or the R package 'scholar'. All of the data and raw code used in this document can be viewed on github here. Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/13/2025).
+This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/13/2025) using the Harzing Publish or Perish Windows application or the R package 'scholar'. All of the data and raw code used in this document can be viewed on [github here](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/13/2025).
 
 ## Google Scholar Citations Per Year
 
