@@ -1,0 +1,192 @@
+---
+title: 'Bibliometric Analysis: Matthew A. Peeples'
+author: "Matthew A. Peeples"
+date: "2025-02-13"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/13/2025) using the Harzing Publish or Perish Windows application or the R package 'scholar'. All of the data and raw code used in this document can be viewed on github here. Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/13/2025).
+
+## Google Scholar Citations Per Year
+
+The plot below shows the number of citation I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of citations I have received per year has generally shown an upward trajectory both pre- and post-tenure. The large peak in 2023 is partly an artifact of how Google Scholar counts citations. Many of the citations recognized in 2023 are associated with my *Network Science in Archaeology* book as well as the *Oxford Handbook of Archaeological Network Science* book I co-edited. Although the official release date of the first book was 2023 and the second was 2024, the online version of the *Handbook* went online in late 2023 and thus, all citations are recognized in 2023 in Google Scholar rather than spread between 2023 and 2024. As of 2/13/2025 my work has been cited 2,950 times with an h-index of 30 and an i10-index of 51.
+
+```{r cites, message=F, warning=F, echo=F, fig.height=3}
+library(scholar)
+## Define the id for Matthew Peeples
+id <- '8B39PWQAAAAJ'
+
+## Get his citation history, i.e. citations to his work in a given year
+ct <- get_citation_history(id)
+ct <- ct[-nrow(ct),]
+
+
+## Plot citation trend
+library(ggplot2)
+p1 <- ggplot(ct, aes(year, cites)) + geom_line() + geom_point(size=4) +
+  scale_x_continuous("Year", labels = as.character(ct$year), breaks = ct$year) +
+  ylab("Citations in Google Scholar") +
+  theme_classic() +
+  theme(axis.text=element_text(size=10), axis.title=element_text(size=10))
+
+p1 <- p1 + annotate('rect', xmin=2018.5, xmax=2024, ymin=0, ymax=500,
+                    alpha=0.2, fill='blue') + annotate('text', x=2021,y=50, label='Post-Tenure', size=4, col='blue')
+
+p1 <- p1 + annotate('rect', xmin=2015, xmax=2018.5, ymin=0, ymax=500,
+                    alpha=0.2, fill='red') + annotate('text', x=2017,y=50, label='Pre-Tenure', size=4, col='red')
+
+p1
+
+```
+
+\newpage
+## Citations and Publication Reach
+
+In order to document the expanding reach of my research since I earned tenure, I scraped and downloaded information on all papers that have cited my work using Publish or Perish since my first publication in 2003. I then cleaned and checked these data (in particular adding years where they were absent) and added two additional variables: Field and Language. These represent the general academic field in which a citing publication falls and the original language in which it was published. Languages were automatically detected using the Google "Language Detect" tool. Academic field was determined based on the primary field for a given publication in Scopus and where this was not available, based on my own assessment of the publication content or title.
+
+The plots below show the proportion of publications per year (since I arrived at ASU) that fall into academic fields outside of anthropology and archaeology (top) and publications appearing in languages other than English (bottom). Note that there are pronounced increases in both non-Anthropology/Archaeology citations and non-English citations in recent years, demonstrating the increasing reach of my research.
+
+```{r reach, message=F, warning=F, echo=F, fig.height=6}
+library(ggplot2)
+library(ggpubr)
+
+cites <- read.csv('PoPCites_updated.csv', header=T)
+cites <- unique(cites[,1:6])
+
+dat <- cites[,which(colnames(cites) %in% c('Field','Year','Language'))]
+
+out <- as.data.frame(matrix(0,10,3))
+colnames(out) <- c('Year','OutsideCitesPerYear','Language')
+out[,1] <- seq(2015,2024)
+for (i in out[,1])  {
+  temp <- dat[which(dat$Year==i),]
+  out[i-2014,2] <- length(which(!temp$Field  %in% c('Anthropology','Archaeology')))/nrow(temp)
+  out[i-2014,3] <- length(which(!temp$Language  %in% c('English')))/nrow(temp)
+}
+
+
+p1 <- ggplot(data=out) +
+  geom_line(aes(x=Year,y=OutsideCitesPerYear)) +
+  scale_x_continuous("Year", labels = as.character(out$Year), breaks = out$Year) +
+  ylab("Propotion of Citations Outside of Anthropology and Archaeology") +
+  theme_classic() +
+  theme(axis.text=element_text(size=7), axis.title=element_text(size=7))
+
+
+p1 <- p1 + annotate('rect', xmin=2019, xmax=2024, ymin=0.14, ymax=0.275,
+    alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.157, label='Post-Tenure', size=7, col='blue')
+
+
+
+p2 <- ggplot(data=out) +
+  geom_line(aes(x=Year,y=Language)) +
+  scale_x_continuous("Year", labels = as.character(out$Year), breaks = out$Year) +
+  ylab("Propotion of Citations in Non-English Language Publications") +
+  theme_classic() +
+  theme(axis.text=element_text(size=7), axis.title=element_text(size=7))
+
+
+p2 <- p2 + annotate('rect', xmin=2019, xmax=2024, ymin=0, ymax=0.075,
+             alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.01, label='Post-Tenure', size=8, col='blue')
+
+ggarrange(p1,p2, nrow=2, ncol=1)
+```
+
+\newpage
+In order to dig into this a little further, I display a chart with the fields (other than Anthropology and Archaeology) for publications citing my work. As this shows, my work is being recognized and used by researchers in the computational, social, and environmental sciences in particular. I have received a few additional citations in fields like education, health science, library science, cognitive science, mathematics, and political science largely based on methodological contributions of my research. 
+
+
+```{r field, warning=F, message=F, echo=FALSE,fig.height=3}
+field <- as.data.frame(table(dat$Field))
+field <- field[-which(field$Var1 %in% c('Anthropology','Archaeology','archaeology','')),]
+field2 <- field[which(field$Freq>14),]
+field2[11,2] <-sum(field$Freq[which(field$Freq<15)])
+levels(field2$Var1) <- c(levels(field2$Var1), 'Other')
+field2[11,1] <- 'Other'
+colnames(field2) <- c('Field','Freq')
+
+# Compute percentages
+field2$fraction = field2$Freq / sum(field2$Freq)
+
+# Compute the cumulative percentages (top of each rectangle)
+field2$ymax = cumsum(field2$fraction)
+
+# Compute the bottom of each rectangle
+field2$ymin = c(0, head(field2$ymax, n=-1))
+
+# Make the plot
+p2 <- ggplot(field2, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Field)) +
+  geom_rect() +
+  scale_fill_brewer(palette='Spectral') +
+  coord_polar(theta="y") + 
+  xlim(c(2, 4)) +
+  theme_minimal()
+
+p2 <- p2 +  theme(axis.ticks=element_blank(),  # the axis ticks
+           axis.title=element_blank(),  # the axis labels
+           axis.text.y=element_blank()) # the 0.75, 1.00, 1.25 labels.
+p2
+```
+
+
+The chart below shows the languages of non-English publications that cite my work. As of 2024, my work has been cited in 18 different languages, in particular in Spanish and French. The "other" languages representing only one citation each are Arabic, Czech, Dutch, German, Indonesian, Norwegian, Polish, Serbian, and Swedish. This illustrates that my publications are beginning to be recognized broadly across the world.
+
+```{r languages, echo=F,fig.height=3}
+lang <- as.data.frame(table(dat$Language))
+lang <- lang[-which(lang$Var1=='English'),]
+lang2 <- lang[which(lang$Freq>1),]
+lang2[9,2] <-sum(lang$Freq[which(lang$Freq==1)])
+levels(lang2$Var1) <- c(levels(lang2$Var1), 'Other')
+lang2[9,1] <- 'Other'
+colnames(lang2) <- c('Language','Freq')
+
+# Compute percentages
+lang2$fraction = lang2$Freq / sum(lang2$Freq)
+
+# Compute the cumulative percentages (top of each rectangle)
+lang2$ymax = cumsum(lang2$fraction)
+
+# Compute the bottom of each rectangle
+lang2$ymin = c(0, head(lang2$ymax, n=-1))
+
+# Make the plot
+p1 <- ggplot(lang2, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Language)) +
+  geom_rect() +
+  scale_fill_brewer(palette='Spectral') +
+  coord_polar(theta="y") + 
+  xlim(c(2, 4)) +
+  theme_minimal()
+
+p1 <- p1 +  theme(axis.ticks=element_blank(),  # the axis ticks
+           axis.title=element_blank(),  # the axis labels
+           axis.text.y=element_blank()) # the 0.75, 1.00, 1.25 labels.
+
+p1
+```
+
+\newpage
+## Co-Author Networks
+
+One additional way of looking at the impact and reach of my publications is exploring my co-authorship network. In order to do this, I scraped all of my "coauthor" data from Google Scholar using the 'scholar' package. Note that this package will only locate co-authors who have an active Google Scholar profile. The resulting data are shown below as an ego network focused on me. Note that there are many distinct sub-groups in this network that are only connected via their path through me. Indeed, the transitivity of this network is relatively low at at 0.105 indicating a ego centered graph with substantial structural holes (gaps in network structure). Although this sample is somewhat limited, the results here illustrate my key role as a "broker" and collaborator connecting many communities of scholars who would otherwise be disconnected.
+
+```{r network, echo=F, warning=F, message=F, fig.height=7}
+
+library(scholar)
+
+## Define the id for Matthew Peeples
+id <- '8B39PWQAAAAJ'
+
+coauthor_network <- get_coauthors('8B39PWQAAAAJ', n_coauthors = 500)
+
+coauthor_network <- coauthor_network[-which(coauthor_network[,2] %in% c('Search Help','About Scholar')),]
+
+plot_coauthors(coauthor_network, size_labels=1)
+
+```
+
