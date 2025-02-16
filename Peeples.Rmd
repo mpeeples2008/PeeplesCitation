@@ -1,7 +1,7 @@
 ---
 title: 'Bibliometric Analysis: Matthew A. Peeples'
 author: "Matthew A. Peeples"
-date: "2025-02-13"
+date: "2025-02-15"
 output: pdf_document
 ---
 
@@ -11,11 +11,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/13/2025) using the Harzing Publish or Perish Windows application or the R package 'scholar'. All of the data and raw code used in this document can be viewed on [github here](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/13/2025).
+This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/15/2025) using the Harzing Publish or Perish Windows application and the R package 'scholar'. All of the data and raw code used in this document can be viewed on [Github here: https://github.com/mpeeples2008/PeeplesCitation](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/15/2025).
 
 ## Google Scholar Citations Per Year
 
-The plot below shows the number of citation I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of citations I have received per year has generally shown an upward trajectory both pre- and post-tenure. The large peak in 2023 is partly an artifact of how Google Scholar counts citations. Many of the citations recognized in 2023 are associated with my *Network Science in Archaeology* book as well as the *Oxford Handbook of Archaeological Network Science* book I co-edited. Although the official release date of the first book was 2023 and the second was 2024, the online version of the *Handbook* went online in late 2023 and thus, all citations are recognized in 2023 in Google Scholar rather than spread between 2023 and 2024. As of 2/13/2025 my work has been cited 2,950 times with an h-index of 30 and an i10-index of 51.
+The plot below shows the number of citations I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of annual citations has generally shown an upward trajectory. The large peak in 2023 is associated with my co-edited *Oxford Handbook of Archaeological Network Science* which included 42 chapters explicitly focused on archaeological networks generating a large number of citations. Although the book was officially released in 2024 the online version was first made available in December 2023 and thus, Google Scholar counts those citations in 2023. 
+
+As of 2/15/2025 my work has been **cited 2,945 times** with an **h-index of 30** and an **i10-index of 51**. At the time of my last review for tenure I had received **717 citations** with a **h-index of 15**. This suggests that citations and apparent impact have both increased substantially since tenure.
 
 ```{r cites, message=F, warning=F, echo=F, fig.height=3}
 library(scholar)
@@ -44,6 +46,33 @@ p1 <- p1 + annotate('rect', xmin=2015, xmax=2018.5, ymin=0, ymax=500,
 p1
 
 ```
+
+\newpage
+## Journal Impact Factors
+
+Next, I explore the Scopus impact factors/percentiles for journals in which I have published through time. In order to do this, I created a file of all of my journal publications that have Scopus CiteScores and recorded both the CiteScore and the highest percentile by field/area for each journals. The vast majority of my publications through time have appeared in highly ranked journals. All but one of my publications are in journals in the **top quartile** by field and **84% are in the top 10% of journal by field**. Given the consistency with which I have published in highly ranked journals there is little room for improvement through time but, as the boxplots below illustrate, there is a trend toward my publications narrowing to the most highly ranked journals by field in my time at ASU and post-tenure.
+
+\
+\
+
+
+```{r impact, echo=F, warning=F, message=F}
+
+library(ggplot2)
+impact <- read.csv('impact.csv',header=T)
+
+impact$Period <- factor(impact$Period, levels = c('pre-ASU','pre-tenure','post-tenure'))
+
+ggplot(data=impact, aes(y=Percentile, x=Period)) + 
+  geom_boxplot()+
+  theme_bw()+
+  theme(axis.text=element_text(size=10), axis.title=element_text(size=10))
+
+
+```
+
+
+
 
 \newpage
 ## Citations and Publication Reach
@@ -163,7 +192,7 @@ p1
 \newpage
 ## Co-Author Networks
 
-One additional way of looking at the impact and reach of my publications is exploring my co-authorship network. In order to do this, I scraped all of my "coauthor" data from Google Scholar using the 'scholar' package. Note that this package will only locate co-authors who have an active Google Scholar profile. The resulting data are shown below as an ego network focused on me. Note that there are many distinct sub-groups in this network that are only connected via their path through me. Indeed, the transitivity of this network is relatively low at at 0.105 indicating a ego centered graph with substantial structural holes (gaps in network structure). Although this sample is somewhat limited, the results here illustrate my key role as a "broker" and collaborator connecting many communities of scholars who would otherwise be disconnected.
+One additional way of looking at the impact and reach of my publications is exploring my co-authorship network. In order to do this, I scraped all of my "coauthor" data from Google Scholar using the 'scholar' package. Note that this package will only locate co-authors who have an active Google Scholar profile. The resulting data are shown below as an ego network focused on me. Note that there are many distinct sub-groups in this network that are only connected via their path through me. Indeed, the transitivity of this network is relatively low at at **transitivity = 0.105** indicating a ego centered network with substantial structural holes (gaps in network structure). Although this sample is somewhat limited, the results here illustrate my key role as a "broker" and collaborator connecting many communities of scholars who would otherwise be disconnected.
 
 ```{r network, echo=F, warning=F, message=F, fig.height=7}
 
@@ -177,6 +206,59 @@ coauthor_network <- get_coauthors('8B39PWQAAAAJ', n_coauthors = 500)
 coauthor_network <- coauthor_network[-which(coauthor_network[,2] %in% c('Search Help','About Scholar')),]
 
 plot_coauthors(coauthor_network, size_labels=1)
+
+```
+
+\newpage
+## International Collaborations and Impact
+
+In order to illustrate my international profile and impact as a researchers I provide a map showing the worldwide distribution of my collaborators. As this map shows, I have collaborators across the US as well as many in Europe. This map was generated by manually compiling the cities/affiliation for my co-authors, including only the interval since I started my position at ASU.
+
+\
+\
+
+```{r analytics, warning=F, message=F, echo=F}
+library(googleAnalyticsR)
+library(maps)
+library(tidyverse)
+library(ggthemes)
+
+ga_auth(email="mpeeple@asu.edu")
+
+my_property_id <- 319575878
+from_date <- "2023-03-01"
+to_date <- "2025-02-15"
+           
+overall <- ga_data(
+  my_property_id,
+  metrics = c("activeUsers", "newUsers","sessions", "screenPageViews"),
+  date_range = c(from_date, to_date)
+  )
+
+country <- ga_data(
+  my_property_id,
+  dimensions = c("country"),
+  metrics = c("activeUsers", "newUsers","sessions", "screenPageViews"),
+  date_range = c(from_date, to_date)
+)
+
+
+world_coordinates <- map_data("world") 
+collab <- read.csv("collabs.csv",header=T) 
+  
+ggplot() + 
+  geom_map( 
+    data = world_coordinates, map = world_coordinates, 
+    aes(long, lat, map_id = region), 
+    color = "lightblue", fill= "lightyellow"
+  )+ 
+geom_point( 
+    data = collab, 
+    aes(x=long, y=lat), 
+    alpha = 0.5, size=2 
+  ) + 
+  theme_minimal() +
+  theme(legend.position='none')
 
 ```
 
