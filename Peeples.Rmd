@@ -3,6 +3,9 @@ title: 'Bibliometric Analysis: Matthew A. Peeples'
 author: "Matthew A. Peeples"
 date: "2025-02-15"
 output: pdf_document
+header-includes:
+    \usepackage{helvet}
+  \renewcommand{\familydefault}{\sfdefault}
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +53,7 @@ p1
 \newpage
 ## Journal Impact Factors
 
-Next, I explore the Scopus impact factors/percentiles for journals in which I have published through time. In order to do this, I created a file of all of my journal publications that have Scopus CiteScores and recorded both the CiteScore and the highest percentile by field/area for each journals. The vast majority of my publications through time have appeared in highly ranked journals. All but one of my publications are in journals in the **top quartile** by field and **84% are in the top 10% of journal by field**. Given the consistency with which I have published in highly ranked journals there is little room for improvement through time but, as the boxplots below illustrate, there is a trend toward my publications narrowing to the most highly ranked journals by field in my time at ASU and post-tenure.
+Next, I explore the Scopus impact factors/percentiles for journals in which I have published through time. In order to do this, I created a file of all of my journal publications that have Scopus CiteScores and recorded both the CiteScore and the highest percentile by field/area for each journals. The vast majority of my publications through time have appeared in highly ranked journals. All but one of my publications are in journals in the **top quartile** by field and **84% are in the top 10% of journals by field**. Given the consistency with which I have published in highly ranked journals there is little room for improvement through time but, as the boxplots below illustrate, there is a trend toward my publications narrowing to the most highly ranked journals by field in my time at ASU and post-tenure.
 
 \
 \
@@ -80,6 +83,7 @@ ggplot(data=impact, aes(y=Percentile, x=Period)) +
 In order to document the expanding reach of my research since I earned tenure, I scraped and downloaded information on all papers that have cited my work using Publish or Perish since my first publication in 2003. I then cleaned and checked these data (in particular adding years where they were absent) and added two additional variables: Field and Language. These represent the general academic field in which a citing publication falls and the original language in which it was published. Languages were automatically detected using the Google "Language Detect" tool. Academic field was determined based on the primary field for a given publication in Scopus and where this was not available, based on my own assessment of the publication content or title.
 
 The plots below show the proportion of publications per year (since I arrived at ASU) that fall into academic fields outside of anthropology and archaeology (top) and publications appearing in languages other than English (bottom). Note that there are pronounced increases in both non-Anthropology/Archaeology citations and non-English citations in recent years, demonstrating the increasing reach of my research.
+\
 
 ```{r reach, message=F, warning=F, echo=F, fig.height=6}
 library(ggplot2)
@@ -129,7 +133,7 @@ ggarrange(p1,p2, nrow=2, ncol=1)
 
 \newpage
 In order to dig into this a little further, I display a chart with the fields (other than Anthropology and Archaeology) for publications citing my work. As this shows, my work is being recognized and used by researchers in the computational, social, and environmental sciences in particular. I have received a few additional citations in fields like education, health science, library science, cognitive science, mathematics, and political science largely based on methodological contributions of my research. 
-
+\
 
 ```{r field, warning=F, message=F, echo=FALSE,fig.height=3}
 field <- as.data.frame(table(dat$Field))
@@ -153,13 +157,14 @@ p2 <- ggplot(field2, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Field)) +
   theme_minimal()
 
 p2 <- p2 +  theme(axis.ticks=element_blank(),  
-           axis.title=element_blank(),  
-           axis.text.y=element_blank()) 
+           axis.text.y=element_blank(), 
+           axis.title=element_blank())  
 p2
 ```
 
 
 The chart below shows the languages of non-English publications that cite my work. As of 2024, my work has been cited in 18 different languages, in particular in Spanish and French. The "other" languages representing only one citation each are Arabic, Czech, Dutch, German, Indonesian, Norwegian, Polish, Serbian, and Swedish. This illustrates that my publications are beginning to be recognized broadly across the world.
+\
 
 ```{r languages, echo=F,fig.height=3}
 lang <- as.data.frame(table(dat$Language))
@@ -210,18 +215,41 @@ plot_coauthors(coauthor_network, size_labels=1)
 ```
 
 \newpage
-## International Collaborations and Impact
+## International Collaborations 
 
-In order to illustrate my international profile and impact as a researchers I provide a map showing the worldwide distribution of my collaborators. As this map shows, I have collaborators across the US as well as many in Europe. This map was generated by manually compiling the cities/affiliation for my co-authors, including only the interval since I started my position at ASU.
+In order to illustrate my international profile as a researchers I provide a map showing the worldwide distribution of my collaborators. As this map shows, I have collaborators across the US as well as many in Europe. This map was generated by manually compiling the cities/affiliation for my co-authors, including only the interval since I started my position at ASU.
 
-\
-\
 
-```{r analytics, warning=F, message=F, echo=F}
-library(googleAnalyticsR)
+```{r analytics, warning=F, message=F, echo=F, fig.height=3}
 library(maps)
 library(tidyverse)
 library(ggthemes)
+
+world_coordinates <- map_data("world") 
+collab <- read.csv("collabs.csv",header=T) 
+  
+ggplot() + 
+  geom_map( 
+    data = world_coordinates, map = world_coordinates, 
+    aes(long, lat, map_id = region), 
+    color = "lightblue", fill= "lightyellow"
+  )+ 
+geom_point( 
+    data = collab, 
+    aes(x=long, y=lat), 
+    alpha = 0.5, size=2 
+  ) + 
+  theme_minimal() +
+  theme(legend.position='none')
+
+```
+
+
+In addition to looking at my publications, it is also instructive to look to the use of online resoruces I have created. For example, accordding to Google Analytics data scraped using the 'googleAnalyticsR' package the online companion to my book *Network Science in Archaeology* available at [https://book.archnetworks.net](https://book.archnetworks.net) has received **6,823 unique visitors** since the book was released which come from more than 100 different countries or regions. The table below shows information on unique visits and active users by country for the top 20 counties represented. This list shows that my work is being used by researchers across many regions of the world.
+
+```{r analytics2, warning=F, message=F, echo=F}
+library(googleAnalyticsR)
+library(maps)
 
 ga_auth(email="mpeeple@asu.edu")
 
@@ -242,23 +270,8 @@ country <- ga_data(
   date_range = c(from_date, to_date)
 )
 
+country <- as.data.frame(country)
 
-world_coordinates <- map_data("world") 
-collab <- read.csv("collabs.csv",header=T) 
-  
-ggplot() + 
-  geom_map( 
-    data = world_coordinates, map = world_coordinates, 
-    aes(long, lat, map_id = region), 
-    color = "lightblue", fill= "lightyellow"
-  )+ 
-geom_point( 
-    data = collab, 
-    aes(x=long, y=lat), 
-    alpha = 0.5, size=2 
-  ) + 
-  theme_minimal() +
-  theme(legend.position='none')
-
+country[1:20,]
 ```
 
