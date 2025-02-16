@@ -2,10 +2,10 @@
 title: 'Bibliometric Analysis: Matthew A. Peeples'
 author: "Matthew A. Peeples"
 date: "2025-02-15"
-output: pdf_document
-header-includes:
-    \usepackage{helvet}
-  \renewcommand{\familydefault}{\sfdefault}
+output:
+  pdf_document: default
+  word_document: default
+header-includes: \usepackage{helvet} \renewcommand{\familydefault}{\sfdefault}
 ---
 
 ```{r setup, include=FALSE}
@@ -14,16 +14,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/15/2025) using the Harzing Publish or Perish Windows application and the R package 'scholar'. All of the data and raw code used in this document can be viewed on [Github here: https://github.com/mpeeples2008/PeeplesCitation](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing.
+This document contains bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/15/2025) using the Harzing Publish or Perish Windows application and the R package 'scholar'. All of the data and raw code used in this document can be viewed on [Github here: https://github.com/mpeeples2008/PeeplesCitation](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing.
 
 ## Google Scholar Citations Per Year
 
-The plot below shows the number of citations I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of annual citations has generally shown an upward trajectory. The large peak in 2023 is associated with my co-edited *Oxford Handbook of Archaeological Network Science* which included 42 chapters explicitly focused on archaeological networks and generated a large number of citations. Although the book was officially released in 2024 the online version was first made available in December 2023 and thus, Google Scholar counts those citations in 2023. 
+The plot below shows the number of citations I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of annual citations has generally shown an upward trajectory. The large peak in 2023 is associated with my co-edited *Oxford Handbook of Archaeological Network Science* which included 42 chapters explicitly focused on archaeological networks and included a large number of citations to my work. Although the book was officially released in 2024 the online version was first made available in December 2023 and thus, Google Scholar counts those citations in 2023. 
 
-As of 2/15/2025 my work has been **cited 2,945 times** with an **h-index of 30** and an **i10-index of 51**. At the time of my last review for tenure I had received **717 citations** with a **h-index of 15**. This suggests that citations and apparent impact have both increased substantially since tenure.
+As of 2/15/2025 my work has been **cited 2,945 times** with an **h-index of 30** and an **i10-index of 51**. At the time of my last review for tenure I had **717 citations** with a **h-index of 15**. This trajectory suggests that citations and apparent impact have both increased substantially since tenure.
 
 \
-```{r cites, message=F, warning=F, echo=F, fig.height=3}
+```{r cites, message=F, warning=F, echo=F, fig.height=3, fig.width=7}
 library(scholar)
 ## Define the id for Matthew Peeples
 id <- '8B39PWQAAAAJ'
@@ -54,7 +54,7 @@ p1
 \newpage
 ## Journal Impact Factors
 
-Next, I explore the Scopus impact factors/percentiles for journals in which I have published through time. In order to do this, I created a file of all of my journal publications that have Scopus CiteScores and recorded both the CiteScore and the highest percentile by field/area for each journals. The vast majority of my publications through time have appeared in highly ranked journals. All but one of my publications are in journals in the **top quartile** by field and **84% are in the top 10% of journals by field**. Given the consistency with which I have published in highly ranked journals there is little room for improvement through time but, as the boxplots below illustrate, there is a trend toward my publications narrowing to the most highly ranked journals by field in my time at ASU and post-tenure.
+Next, I explore the Scopus impact factors/percentiles for journals in which I have published through time. In order to do this, I created a file of all of my journal publications that have Scopus CiteScores and recorded both the CiteScore and the highest percentile by field/area for each journal. The vast majority of my publications through time have appeared in highly ranked journals. All but one of my publications are in journals in the **top quartile** by field and **84% are in the top 10% of journals by field**. Given the consistency with which I have published in highly ranked journals there is little room for improvement through time but, as the boxplots below illustrate, there is a trend toward my publications narrowing to the most highly ranked journals by field in my time at ASU and post-tenure.
 
 \
 \
@@ -114,7 +114,7 @@ p1 <- ggplot(data=out) +
 
 
 p1 <- p1 + annotate('rect', xmin=2019, xmax=2024, ymin=0.14, ymax=0.275,
-    alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.157, label='Post-Tenure', size=7, col='blue')
+    alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.157, label='Post-Tenure', size=5, col='blue')
 
 
 
@@ -127,7 +127,7 @@ p2 <- ggplot(data=out) +
 
 
 p2 <- p2 + annotate('rect', xmin=2019, xmax=2024, ymin=0, ymax=0.075,
-             alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.01, label='Post-Tenure', size=8, col='blue')
+             alpha=0.2, fill='blue') + annotate('text', x=2021,y=0.01, label='Post-Tenure', size=5, col='blue')
 
 ggarrange(p1,p2, nrow=2, ncol=1)
 ```
@@ -196,11 +196,11 @@ p1
 ```
 
 \newpage
-## Co-Author Networks
+## Co-Authorship Network
 
-One additional way of looking at the impact and reach of my publications is exploring my co-authorship network. In order to do this, I scraped all of my "coauthor" data from Google Scholar using the 'scholar' package. Note that this package will only locate co-authors who have an active Google Scholar profile. The resulting data are shown below as an ego network focused on me. Note that there are many distinct sub-groups in this network that are only connected via their path through me. Indeed, the transitivity of this network is relatively low at at **transitivity = 0.105** indicating a ego centered network with substantial structural holes (gaps in network structure). Although this sample is somewhat limited, the results here illustrate my key role as a "broker" and collaborator connecting many communities of scholars who would otherwise be disconnected.
+One additional way of looking at the impact and reach of my publications is exploring my co-authorship network. In order to do this, I scraped all of my "coauthor" data from Google Scholar using the 'scholar' package. Note that this package will only locate co-authors who have an active Google Scholar profile. The resulting data are shown below as an ego network focused on me. Note that there are many distinct sub-groups in this network that are only connected via their path through me. Indeed, the transitivity of this network is relatively low at **0.105** indicating an ego centered network with substantial structural holes (gaps in network structure). Although this sample is somewhat limited, the results here illustrate my key role as a "broker" and collaborator connecting many communities of scholars who would otherwise be disconnected.
 
-```{r network, echo=F, warning=F, message=F, fig.height=7}
+```{r network, echo=F, warning=F, message=F, fig.height=5, fig.width=8}
 
 library(scholar)
 
@@ -211,17 +211,17 @@ coauthor_network <- get_coauthors('8B39PWQAAAAJ', n_coauthors = 500)
 
 coauthor_network <- coauthor_network[-which(coauthor_network[,2] %in% c('Search Help','About Scholar')),]
 
-plot_coauthors(coauthor_network, size_labels=1)
+plot_coauthors(coauthor_network, size_labels=1.5)
 
 ```
 
 \newpage
-## International Collaborations 
+## International Collaborations and Impact
 
-In order to illustrate my international profile as a researchers I provide a map showing the worldwide distribution of my collaborators. As this map shows, I have collaborators across the US as well as many in Europe. This map was generated by manually compiling the cities/affiliation for my co-authors, including only the interval since I started my position at ASU.
+In order to illustrate my international profile as a researcher I provide a map showing the worldwide distribution of my collaborators. As this map shows, I have collaborators across the US as well as many in Europe. This map was generated by manually compiling the cities/affiliation for my co-authors, including only the interval since I started my position at ASU.
 
 
-```{r analytics, warning=F, message=F, echo=F, fig.height=3}
+```{r analytics, warning=F, message=F, echo=F, fig.height=3, fig.width=5}
 library(maps)
 library(tidyverse)
 library(ggthemes)
@@ -246,7 +246,7 @@ geom_point(
 ```
 
 
-In addition to looking at my publications, it is also instructive to look to the use of online resoruces I have created. For example, accordding to Google Analytics data scraped using the 'googleAnalyticsR' package the online companion to my book *Network Science in Archaeology* available at [https://book.archnetworks.net](https://book.archnetworks.net) has received **6,823 unique visitors** since the book was released which come from more than 100 different countries or regions. The table below shows information on unique visits and active users by country for the top 20 counties represented. This list shows that my work is being used by researchers across many regions of the world.
+In addition to looking at my publications, it is also instructive to look to the use of online resources I have created. For example, according to Google Analytics data scraped using the 'googleAnalyticsR' package, the online companion to my book *Network Science in Archaeology* available at [https://book.archnetworks.net](https://book.archnetworks.net) has received **6,823 unique visitors** since the book was released from more than **100 different countries**. The table below shows information on unique visits and active users by country for the top 20 counties represented. This list shows that my work is being used by researchers across the world.
 
 ```{r analytics2, warning=F, message=F, echo=F}
 library(googleAnalyticsR)
