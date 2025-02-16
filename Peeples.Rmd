@@ -14,14 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/15/2025) using the Harzing Publish or Perish Windows application and the R package 'scholar'. All of the data and raw code used in this document can be viewed on [Github here: https://github.com/mpeeples2008/PeeplesCitation](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing (2/15/2025).
+This document contains a set of bibliometric and citation analyses for the published work of Matthew Peeples. This information was prepared for the purposes of consideration for academic promotion. The data used here come directly from Google Scholar and Scopus and were scraped (2/15/2025) using the Harzing Publish or Perish Windows application and the R package 'scholar'. All of the data and raw code used in this document can be viewed on [Github here: https://github.com/mpeeples2008/PeeplesCitation](https://github.com/mpeeples2008/PeeplesCitation). Note that I have been at ASU since 2015 and received tenure and was promoted in 2019 (submitted review in 2018). These data are current up to 2024 which is the last full year available at the time of writing.
 
 ## Google Scholar Citations Per Year
 
-The plot below shows the number of citations I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of annual citations has generally shown an upward trajectory. The large peak in 2023 is associated with my co-edited *Oxford Handbook of Archaeological Network Science* which included 42 chapters explicitly focused on archaeological networks generating a large number of citations. Although the book was officially released in 2024 the online version was first made available in December 2023 and thus, Google Scholar counts those citations in 2023. 
+The plot below shows the number of citations I have received per year up to 2024, with the pre- and post-tenure intervals indicated. Note that the number of annual citations has generally shown an upward trajectory. The large peak in 2023 is associated with my co-edited *Oxford Handbook of Archaeological Network Science* which included 42 chapters explicitly focused on archaeological networks and generated a large number of citations. Although the book was officially released in 2024 the online version was first made available in December 2023 and thus, Google Scholar counts those citations in 2023. 
 
 As of 2/15/2025 my work has been **cited 2,945 times** with an **h-index of 30** and an **i10-index of 51**. At the time of my last review for tenure I had received **717 citations** with a **h-index of 15**. This suggests that citations and apparent impact have both increased substantially since tenure.
 
+\
 ```{r cites, message=F, warning=F, echo=F, fig.height=3}
 library(scholar)
 ## Define the id for Matthew Peeples
@@ -80,7 +81,7 @@ ggplot(data=impact, aes(y=Percentile, x=Period)) +
 \newpage
 ## Citations and Publication Reach
 
-In order to document the expanding reach of my research since I earned tenure, I scraped and downloaded information on all papers that have cited my work using Publish or Perish since my first publication in 2003. I then cleaned and checked these data (in particular adding years where they were absent) and added two additional variables: Field and Language. These represent the general academic field in which a citing publication falls and the original language in which it was published. Languages were automatically detected using the Google "Language Detect" tool. Academic field was determined based on the primary field for a given publication in Scopus and where this was not available, based on my own assessment of the publication content or title.
+In order to document the expanding reach of my research since I earned tenure, I used Publish or Perish to scrape and download information on all papers that have cited my work since my first publication in 2003. I then cleaned and checked these data (in particular adding years where they were absent) and added two additional variables: Academic Field and Language. These represent the general academic field in which a citing publication falls and the original language in which it was published. Languages were automatically detected using the Google "Language Detect" tool. Academic field was determined based on the primary field for a given publication in Scopus and where this was not available, based on my own assessment of the publication content or title.
 
 The plots below show the proportion of publications per year (since I arrived at ASU) that fall into academic fields outside of anthropology and archaeology (top) and publications appearing in languages other than English (bottom). Note that there are pronounced increases in both non-Anthropology/Archaeology citations and non-English citations in recent years, demonstrating the increasing reach of my research.
 \
